@@ -1,0 +1,4 @@
+data_dir = /mn/stornext/d9/iris/data/level2/2014/05/21/20140521_114758_3820258168
+files = find_files('iris_l2*raster*fits', data_dir+'*/')
+dim_files = size(files)
+for j = 0, dim_files[1]-1 do print, j, ' - ', strmin(files[j], strpos(files[j], 'iris_l2'), 100)
