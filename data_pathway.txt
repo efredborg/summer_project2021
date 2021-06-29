@@ -6,3 +6,7 @@ pathway to data:
 directory containing relevant files:
 
 20140521_114758_3820258168
+
+full pathway:
+
+/mn/stornext/d9/iris/data/level2/2014/05/21/20140521_114758_3820258168
