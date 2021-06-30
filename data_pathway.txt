@@ -10,3 +10,7 @@ directory containing relevant files:
 full pathway:
 
 /mn/stornext/d9/iris/data/level2/2014/05/21/20140521_114758_3820258168
+
+
+example filename:
+iris_l2_20140521_114758_3820258168_raster_t000_r00000.fits
