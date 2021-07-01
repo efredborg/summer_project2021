@@ -19,10 +19,13 @@ goto,here
 ; IRIS raster analysis
 ; ****************************************************************************
 iris_data = '/mn/stornext/d10/HDC2/iris/data/level2_decompressed/2014/05/21/20140521_114758_3820258168/'
+
 fraster = IRIS_FILES('*raster*.fits',path = iris_data)
+
 
 d = iris_obj(fraster[0])
 d->show_lines
+
 ;Spectral regions(windows)
 ; 0   1335.71   C II 1336    > A
 ; 1   1349.43   Fe XII 1349  > ..
@@ -35,6 +38,7 @@ d->show_lines
 ; READ_IRIS_L2,fraster,rindex,rdata
 ; rdata_clean = IRIS_DUSTBUSTER(rindex,rdata,clean_values,/run)
 read_iris_l2,fraster,rindex,rdata,wave='Si IV 1403'
+
 obs_time       = rindex.date_obs
 exp_time       = rindex.exptime
 xcen           = rindex[0].xcen
@@ -56,6 +60,7 @@ print,'Wavelenght     =',minmax(wavelnth)
 DATA_DIR='/mn/stornext/d18/RoCS/kalogodu/data/iris_bp/iris/raster/siiv1403/'
 save, rdata,rindex,obs_time,exp_time,xcen,ycen,fovx,fovy,line,cen_wavelength,wavelnth,filename= DATA_DIR+'iris_raster_1403.sav',description='Si IV 1403 4 step rasters (660) data'
 here:
+DATA_DIR='/mn/stornext/d18/RoCS/kalogodu/data/iris_bp/iris/raster/siiv1403/'
 filename = DATA_DIR+'iris_raster_1403.sav'
 restore,filename,/v
 a    = 130
