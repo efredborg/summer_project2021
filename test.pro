@@ -62,11 +62,15 @@ save, rdata,rindex,obs_time,exp_time,xcen,ycen,fovx,fovy,line,cen_wavelength,wav
 here:
 DATA_DIR='/mn/stornext/d18/RoCS/kalogodu/data/iris_bp/iris/raster/siiv1403/'
 filename = DATA_DIR+'iris_raster_1403.sav'
+
 restore,filename,/v
 a    = 130
 b    = 192
 lam  = wavelnth[a:b]
 data = rdata[a:b,*,*,*]
+
+print, 'here'
+end
 ;reference wavelength calculation
 lp = average(data>0.,[2,3,4])
 yfit_avg = gaussfit(lam,lp,coeff,nterms=5)
