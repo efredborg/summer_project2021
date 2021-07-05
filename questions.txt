@@ -1,0 +1,6 @@
+Questions:
+
+
+  - finding points of interest in the tvg function
+  - storing the data in an efficient way (some command)
+  
