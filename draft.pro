@@ -2,7 +2,7 @@
 data_dir = '/mn/stornext/d9/iris/data/level2/2014/05/21/20140521_114758_3820258168'
 files = find_files('iris_l2*raster*fits', data_dir+'*/')
 dim_files = size(files)
-for j = 0, dim_files[1]-1 do print, j,' - ',  strmid(files[j], strpos(files[j],'iris_l2'),100)
+; for j = 0, dim_files[1]-1 do print, j,' - ',  strmid(files[j], strpos(files[j],'iris_l2'),100)
 
 
 
@@ -86,11 +86,11 @@ prof_db2obs_pca_coef = transpose(prof_db2obs_pca_coef)
 project_pca, transpose(obs_mgii), eval, evec, n_pca, obs_mgii_pca, obs_mgii_pca_coef
 obs_mgii_pca_coef = transpose(obs_mgii_pca_coef)
 euc_dist = calc_dist(obs_mgii_pca_coef, prof_db2obs_pca_coef, mio=1)
-.r
+; .r
 for j =0, dim_sel[1]-1 do begin
     w =  min(closest[j,*], aux)
     print, j, aux
-endfor
+    endfor
 end
 ; Vectorized approach (faster)
 w = min(transpose(euc_dist), closest_pca, dim=1)
