@@ -1,5 +1,5 @@
 path_to_IRIS_l2 = '/mn/stornext/d9/iris/data/level2/2014/05/21/20140521_114758_3820258168'
-dir_Save = '/uio/hume/student-u16/eefredbo/Documents/iris2_out/'
+dir_save = '/uio/hume/student-u16/eefredbo/Documents/iris2_out/'
 filename = 'iris2model_20140521_114758_3820258168_raster_t000_multi.sav'
 
 
@@ -16,10 +16,14 @@ iris2model = iris2(raster_files[0:4], level=2, pca = 60, delta_mu = 0.2, dir_sav
 
 here:
 
-restore, dir_Save+filename
+restore, dir_save+filename
 T_RF = readfits(iris2model[0].rf_db_fits[0])
 vlos_RF_0 = readfits(iris2model[0].rf_db_fits[1])
 vturb_RF_0 = readfits(iris2model[0].rf_db_fits[2])
 nne_RF_0 = readfits(iris2model[0].rf_db_fits[3])
 
+T_node = readfits(iris2model[0].nodes_db_fits[0])
+vlos_node = readfits(iris2model[0].nodes_db_fits[1])
+vturb_node = readfits(iris2model[0].nodes_db_fits[2])
+nne_node = readfits(iris2model[0].nodes_db_fits[3])
 end
