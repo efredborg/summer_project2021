@@ -1,9 +1,25 @@
-data_dir = '/mn/stornext/d9/iris/data/level2/2014/05/21/20140521_114758_3820258168'
-files = find_files('iris_l2*raster*fits', data_dir+'*/')
-dim_files = size(files)
-iris = get_info_irisl2(files[0], factor_and_data=1, mgii_only=1)
+path_to_IRIS_l2 = '/mn/stornext/d9/iris/data/level2/2014/05/21/20140521_114758_3820258168'
+dir_Save = '/uio/hume/student-u16/eefredbo/Documents/iris2_out/'
+filename = 'iris2model_20140521_114758_3820258168_raster_t000_multi.sav'
 
-iris_mgii = transpose(iris.factor.DATA_MG_II_K_2796, [2,1,0])
 
+goto, here
+;filename = 'iris2model_20140521_114758_3820258168_raster_t000_multi.sav'
+; restore, filename, /v
+
+raster_files = file_search(path_to_IRIS_l2+'/*iris_l2*raster*fits')  ; List of IRIS Level2 raster files
+iris2model = iris2(raster_files[0:4], level=2, pca = 60, delta_mu = 0.2, dir_save = dir_save)
+
+;iris2model = iris2(raster_files[0]) ; Default call: latest |IRIS2| database, considering all RPs (delta_mu=1), level=0, no weights
+;iris2model = iris2(raster_files, version_db='v1.0', delta_mu=0.20, level=2)
+;iris2model = iris2(raster_files[11], weights=[1.,1/2.,1.,1/3.], level=1)
+
+here:
+
+restore, dir_Save+filename
+T_RF = readfits(iris2model[0].rf_db_fits[0])
+vlos_RF_0 = readfits(iris2model[0].rf_db_fits[1])
+vturb_RF_0 = readfits(iris2model[0].rf_db_fits[2])
+nne_RF_0 = readfits(iris2model[0].rf_db_fits[3])
 
 end
