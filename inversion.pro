@@ -17,29 +17,35 @@ iris2model = iris2(raster_files[0:4], level=2, pca = 60, delta_mu = 0.2, dir_sav
 here:
 
 restore, dir_save+filename
+
+ltau = iris2model[0].ltau
+
 T_RF = readfits(iris2model[0].rf_db_fits[0])
-;vlos_RF_0 = readfits(iris2model[0].rf_db_fits[1])
-;vturb_RF_0 = readfits(iris2model[0].rf_db_fits[2])
-;nne_RF_0 = readfits(iris2model[0].rf_db_fits[3])
+vlos_RF = readfits(iris2model[0].rf_db_fits[1])
+vturb_RF = readfits(iris2model[0].rf_db_fits[2])
+nne_RF = readfits(iris2model[0].rf_db_fits[3])
 
 T_node = readfits(iris2model[0].nodes_db_fits[0])
-;vlos_node = readfits(iris2model[0].nodes_db_fits[1])
-;vturb_node = readfits(iris2model[0].nodes_db_fits[2])
-;nne_node = readfits(iris2model[0].nodes_db_fits[3])
+vlos_node = readfits(iris2model[0].nodes_db_fits[1])
+vturb_node = readfits(iris2model[0].nodes_db_fits[2])
+nne_node = readfits(iris2model[0].nodes_db_fits[3])
 
 ; Finding the indices corresponding to the LP fitted to each raster image
 
-inds = iris2model.map_index_db[*,400,0] ; finding for the 5 first images and all 4 rasters
+inds = iris2model.map_index_db[*,400,*] ; finding for the 5 first images and all 4 rasters
 dim_inds = size(inds, /dimensions)
 print, dim_inds
 
-;end
+end
 for i=0, dim_inds[0]-1 do begin
   for j=0, dim_inds[1]-1 do begin
-    plot_image, T_RF[*,*,uint(inds[i,j])], /nosquare
-    ;help, readfits(iris2model[i].rf_db_fits[0])
+    print,'indices: ', i,j
+    ;plot_image, reform(T_RF[*,*,uint(inds[i,j])]), /nosquare
+    ;plot_image, reform(vlos_RF[*,*,uint(inds[i,j])]), /nosquare
+    ;plot_image, reform(vturb_RF[*,*,uint(inds[i,j])]), /nosquare
+    plot_image, reform(nne_RF[*,*,uint(inds[i,j])]), /nosquare
     wait, 2
-    print, i,j
+
     endfor
   endfor
 ;print , inds[*,0]
