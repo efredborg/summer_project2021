@@ -4,10 +4,11 @@ dir_save = '/uio/hume/student-u16/eefredbo/Documents/iris2_out/'
 ;filename = 'iris2model_20140521_114758_3820258168_raster_t000_r00000.sav'
 ;filename = 'iris2model_20140521_114758_3820258168_raster_t000_r00000_mymask_01_01.sav'
 filename = 'iris2model_20140521_114758_3820258168_raster_t000_multi.sav'
-filename = '5_imgs_iris2model.sav'
+;filename = '5_imgs_iris2model.sav'
 
 
 restore, dir_save+filename
+
 num_imgs = uint(size(iris2model, /dimensions))
 num_imgs = num_imgs[0]
 
@@ -44,5 +45,19 @@ for i=0, num_imgs -1 do begin
   unc_n_e[i] = uncs[poi[0],poi[1],tau_ind,3]
 
   endfor
+
+openw, 1, 'vars.dat'
+openw, 2, 'uncs.dat'
+printf, 1, '#      Temp', '          ',  'vlos', '          ', 'vturb', '         ', 'n_e'
+printf, 2, '#      Temp', '          ',  'vlos', '          ', 'vturb', '         ', 'n_e'
+
+for j = 0, num_imgs-1 do begin
+  printf, 1, T[j], ' ', vlos[j], ' ', vturb[j], ' ', n_e[j]
+  printf, 2, unc_T[j], ' ', unc_vlos[j], ' ', unc_vturb[j], ' ', unc_n_e[j]
+
+  endfor
+;printf, 1, T[0]
+close, 1
+close, 2
 
 end

@@ -10,7 +10,9 @@ mask = fltarr(4, 775,2)
 mask[*,400,*] = 1
 
 raster_files = file_search(path_to_IRIS_l2+'/*iris_l2*raster*fits')  ; List of IRIS Level2 raster files
-iris2model = iris2(raster_files[0:4],pca=60,level=2,weights_window = [1.,1/6.,1.,1/6.], dir_save = dir_save,  name_save='5_imgs_iris2model.sav')
+;iris2model = iris2(raster_files[0:4],pca=60,level=2,weights_window = [1.,1/6.,1.,1/6.], dir_save = dir_save,  name_save='5_imgs_iris2model.sav')
+iris2model = iris2(raster_files[*],pca=60,level=2,weights_window = [1.,1/6.,1.,1/6.], dir_save = dir_save)
+
 
 ;here:
 
