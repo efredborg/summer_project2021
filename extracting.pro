@@ -46,6 +46,9 @@ for i=0, num_imgs -1 do begin
 
   endfor
 
+
+save, T, vlos, vturb, n_e, unc_T, unc_vlos, unc_vturb, unc_n_e, filename='variables.sav'
+
 openw, 1, 'vars.dat'
 openw, 2, 'uncs.dat'
 printf, 1, '#      Temp', '          ',  'vlos', '          ', 'vturb', '         ', 'n_e'
