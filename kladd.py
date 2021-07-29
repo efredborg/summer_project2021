@@ -4,27 +4,23 @@ import pywt
 import matplotlib.pyplot as plt
 from scipy.fftpack import fft
 
+freq_min = np.array((0.03,2))
+print(freq_min, 1/freq_min)
 per_min = np.array((33,0.5))
 per_sec = per_min*60
 freq_min = 1/per_min
 freq_sec = 1/per_sec
-
-wa_test = np.linspace(0.03,2,2000) # frequencies
-print(1/wa_test[0], 1/wa_test[-1])
-
-print(freq_min, freq_sec)
-
+print(freq_min)
 
 
 signal = np.loadtxt('siint_400.dat')
 dt_min = 37/60 # minutes
 dt_sec = 37 # seconds
 N = len(signal)
-T_min = (N-1)*dt_min
-T_sec = (N-1)*dt_sec
-
-fs = N/T_sec
-t = np.linspace(0,T_min,N)
+T = (N-1)*dt_min
+#T_sec = (N-1)*dt_sec
+fs = N/T
+t = np.linspace(0,T,N)
 
 def wavelet_transform(t,signal,wa,k):
     yf=fft(signal)
@@ -35,7 +31,7 @@ def wavelet_transform(t,signal,wa,k):
 
 def wavelet_diagram(signal,K):
     wa=np.linspace(800,2000,1201)
-    wa = np.linspace(freq_min[0], freq_min[1],2000) # frequencies explored in Hz
+    wa = np.linspace(freq_min[0],freq_min[1], 2000) # frequencies explored
     inv_wave=[]
     for i in range(len(wa)):
         wave=wavelet_transform(t,signal,wa[i],K)
@@ -44,7 +40,7 @@ def wavelet_diagram(signal,K):
     plt.contourf(t,1/wa,inv_wave);plt.colorbar();
     plt.title('Wavelet diagram with \n wave number K=%g' % K)
 
-    # plt.show()
+    #plt.show()
 
 plt.figure(figsize=(13,13))
 plt.subplot(221)
@@ -55,12 +51,12 @@ plt.subplot(222)
 wavelet_diagram(signal, 25)
 
 plt.subplot(223)
-wavelet_diagram(signal, 20)
+wavelet_diagram(signal, 12)
 plt.xlabel('Time (min.)')
 plt.ylabel('Period in minutes')
 
 plt.subplot(224)
-wavelet_diagram(signal, 15)
+wavelet_diagram(signal, 6)
 plt.xlabel('Time (min.)')
 
 plt.show()
