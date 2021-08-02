@@ -30,9 +30,9 @@ def wavelet(signal, LC_type = '', plot_LC=False):
     plt.colorbar()
     plt.xlabel('obs. time (min.)')
     plt.ylabel('Signal period (min.)')
-    plt.legend()
+    #plt.legend()
     plt.show()
-    if plot_light_curve==True:
+    if plot_LC==True:
         plt.figure(figsize=(9,9))
         plt.title('Light curve of %s' % LC_type)
         plt.plot(np.arange(0,T+dt,dt)/60,signal, lw=0.8 )
@@ -40,23 +40,24 @@ def wavelet(signal, LC_type = '', plot_LC=False):
         plt.ylabel('Amplitude, %s' % LC_type)
         plt.show()
 
-#wavelet(siint400)
+wavelet(siint400)
 
-def fourier(signal, LC_type = '', P_max=None):
-    yf=np.flip(fft(signal)[0:N//2])
-    xp=np.flip(1/fftfreq(N, dt)[:N//2]/60) # period in minutes
-    print(len(xp), len(yf))
-    #indx = np.where(xp<=35)[0][-1]
-    if P_max =! None:
-        indx = np.where(xp<=P_max)[0][-1]
-        yf = yf[:indx]
-        xp = xp[:indx]
-        
+#LC_type is name of light curve type or variable name.
+# P_max is max period evaluated
+def fourier(signal, LC_type = '', P_max=32):
+    yf=np.flip(fft(signal)[0:N//2]) # flipped to match period
+    np.seterr(divide='ignore') # ignore the divide by zero warning caused in the next line
+    xp=np.flip(1/fftfreq(N, dt)[:N//2]/60) # period in minutes, flipped to go from small to large
+    indx = np.where(xp<=P_max)[0][-1]
+    yf = yf[:indx+1] # +1 to include endpoint
+    xp = xp[:indx+1]
+
 
     plt.figure(figsize=(9,9))
     plt.title('Fourier tranform of %s light curve' % LC_type)
     plt.plot(xp[:indx],2.0/N * np.abs(yf[:indx]), c='k', lw=0.8)
-    #plt.plot()
+    plt.xlabel('Period (min.)')
+    plt.ylabel('Amplitude')
     plt.show()
 
-fourier(siint400, LC_type= 'siint400')
+fourier(siint400, LC_type= 'siint400', P_max = 15)
