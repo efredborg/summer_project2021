@@ -15,16 +15,20 @@ dt_min = dt/60
 N = 660
 T = (N-1)*dt
 T_min = T/60
-scales = np.arange(1,1700)
+# scales translates to frequency or period. 6500 is around 130min period. 1700 is around 34min
+# 4000 is 82 min
+scales = np.arange(1,4000) #
 
 def wavelet(signal, LC_type = '', plot_LC=False, show=False):
+    signal = signal-(np.cumsum(signal)/np.arange(1,len(signal)+1)) # subtracting the running average
+    signal = signal/np.std(signal) # detrending the light curve
     coefs, freq = pywt.cwt(signal, scales, wavelet = 'morl')
     periods = 1/freq/60 # in minutes
-    #print('periods',periods[0], periods[-1])
+    print('periods',periods[0], periods[-1])
 
     plt.figure(figsize=(9,9))
     plt.title('Wavelet analysis on %s light curve' % LC_type)
-    plt.imshow(abs(coefs), aspect='auto', extent = [0,T/60, periods[-1], periods[0 ]], cmap='Spectral')
+    plt.imshow(np.abs(coefs), aspect='auto', extent = [0,T/60, periods[-1], periods[0 ]], cmap='Spectral')
     #plt.hlines(8,0, T/60, colors='red',lw=0.8 , label='Expected ~8 min period')
     plt.gca().invert_yaxis()
     plt.colorbar()
@@ -48,7 +52,7 @@ def wavelet(signal, LC_type = '', plot_LC=False, show=False):
 
 #LC_type is name of light curve type or variable name.
 # P_max is max period evaluated
-def fourier(signal, LC_type = '', P_max=32, show=False):
+def fourier(signal, LC_type = '', P_max=130, show=False):
     yf=np.flip(fft(signal)[0:N//2]) # flipped to match period
     np.seterr(divide='ignore') # ignore the divide by zero warning caused in the next line
     xp=np.flip(1/fftfreq(N, dt)[:N//2]/60) # period in minutes, flipped to go from small to large
@@ -67,6 +71,6 @@ def fourier(signal, LC_type = '', P_max=32, show=False):
         plt.show()
 
 if __name__ == "__main__":
-    siint400 = np.loadtxt('data_folder/siint_400.dat')
-    wavelet(siint400, LC_type = 'siint400')
+    siint400 = np.loadtxt('data_files/siint_400.dat')
+    wavelet(siint400, LC_type = 'siint400', )
     #fourier(siint400, LC_type= 'siint400', P_max = 15)
