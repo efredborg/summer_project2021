@@ -12,5 +12,5 @@ data = np.loadtxt(data_folder+'vars.dat')
 #fourier(temp, LC_type= 'temperature', P_max = 32)
 for i, LC_name in enumerate(LCs):
     LC = data[:,i]
-    wavelet(LC, LC_type = LC_name)
+    wavelet(LC, LC_type = LC_name, plot_LC=True)
     fourier(LC, LC_type= LC_name, P_max = 32)

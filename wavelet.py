@@ -40,6 +40,7 @@ def wavelet(signal, LC_type = '', plot_LC=False, show=False):
         plt.plot(np.arange(0,T+dt,dt)/60,signal, lw=0.8 )
         plt.xlabel('Obs. time (min.)')
         plt.ylabel('Amplitude, %s' % LC_type)
+        plt.savefig(save_folder+'LC_%s.png' % LC_type)
         if show==True:
             plt.show()
 
