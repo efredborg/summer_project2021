@@ -27,9 +27,9 @@ y = np.sin(x*a)
 #plt.show()
 
 
-signal = signal-(np.cumsum(signal)/np.arange(1,len(signal)+1)) # subtracting the running average
+signal = signal-(np.cumsum(signal)/np.arange(1,len(signal)+1)) # subtracting the running average (detrending)
 #signal = signal-np.mean(signal)
-signal = signal/np.std(signal) # detrending the light curve
+signal = signal/np.std(signal) # normalising with respect to
 
 s0 = 0.5
 dj = 1/12
