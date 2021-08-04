@@ -11,24 +11,23 @@ F_sec = 1/P_sec
 
 
 dt = 37 # seconds
-dt_min = dt/60
 N = 660
 T = (N-1)*dt
-T_min = T/60
 # scales translates to frequency or period. 6500 is around 130min period. 1700 is around 34min
 # 4000 is 82 min
-scales = np.arange(1,4000) #
+scales = np.arange(1,180) #
 
 def wavelet(signal, LC_type = '', plot_LC=False, show=False):
     signal = signal-(np.cumsum(signal)/np.arange(1,len(signal)+1)) # subtracting the running average
+    #signal = signal - np.mean(signal)
     signal = signal/np.std(signal) # detrending the light curve
-    coefs, freq = pywt.cwt(signal, scales, wavelet = 'morl')
+    coefs, freq = pywt.cwt(signal, scales, 'morl', sampling_period = dt)
     periods = 1/freq/60 # in minutes
     print('periods',periods[0], periods[-1])
 
     plt.figure(figsize=(9,9))
     plt.title('Wavelet analysis on %s light curve' % LC_type)
-    plt.imshow(np.abs(coefs), aspect='auto', extent = [0,T/60, periods[-1], periods[0 ]], cmap='Spectral')
+    plt.imshow(np.abs(coefs)**2, aspect='auto', extent = [0,T/60, periods[-1], periods[0 ]],  cmap=plt.cm.seismic)
     #plt.hlines(8,0, T/60, colors='red',lw=0.8 , label='Expected ~8 min period')
     plt.gca().invert_yaxis()
     plt.colorbar()
