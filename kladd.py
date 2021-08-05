@@ -29,13 +29,13 @@ y = np.sin(x*a)
 
 signal = signal-(np.cumsum(signal)/np.arange(1,len(signal)+1)) # subtracting the running average (detrending)
 #signal = signal-np.mean(signal)
-signal = signal/np.std(signal) # normalising with respect to
+signal = signal/np.std(signal) # normalising with respect to standard deviation
 
 s0 = 0.5
 dj = 1/12
 J = 5/dj # includes periods up to 132 minutes
 #alpha, _, _ = pywt.ar1(dat)
-mother = wavelet.Morlet(1/8)
+#mother = wavelet.Morlet(1/8)
 periods = np.arange(2*dt, (T+dt)/3,dt)
 freqs = 1/periods
 wave, scales, freqs, coi, fft, fftfreqs = wavelet.cwt(signal, dt,wavelet='morlet', freqs=freqs)
