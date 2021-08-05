@@ -76,7 +76,7 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
     plt.plot(periods, collapsed_power, c='k', lw=0.8)
     plt.xlabel('Periods (min.)')
     plt.ylabel('Amplitude')
-    plt.savefig(plot_folder+'glbl_power_LC_%s.png' % LC_type)
+    plt.savefig(plot_folder+'glbl_power__p%i_LC_%s.png' % (int(periods[-1]),LC_type))
     #plt.show()
 
 
