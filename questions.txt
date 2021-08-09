@@ -1,6 +1,0 @@
-Questions:
-
-
-  - finding points of interest in the tvg function
-  - storing the data in an efficient way (some command)
-  - Perform iris2 inversion on each time-snapshot, save results to .sav?
