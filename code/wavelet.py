@@ -4,7 +4,8 @@ import pywt
 import pycwt as wavelet
 from scipy.fftpack import fft, fftfreq
 plt.rcParams['font.size'] = 16
-plot_folder = 'plots/'
+plot_folder = '/home/efredborg/Documents/summer_project2021/plots/'
+data_folder = '/home/efredborg/Documents/summer_project2021/data_files/'
 
 '''P = np.array((0.1,32)) # period interval we wish to consider (minutes)
 P_sec = P*60
@@ -103,40 +104,21 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
             plt.show()
 
 
-    #plt.figure()
-    #plt.imshow(sig95)
-    #plt.show()
-
+    # plotting the fft but only including up to the max period evaluated
     fft_power = np.abs(fft)**2
+    fft_periods = np.flip(fft_periods)
+    fft_power = np.flip(fft_power)
+    indx = np.array((np.where(fft_periods <= P_max)))[0,-1]
+    fft_periods = fft_periods[:indx+1]
+    fft_power = fft_power[:indx+1]
     plt.figure(figsize=(9,9))
     plt.title('Fourier tranform of %s light curve' % LC_type)
     plt.plot(fft_periods, fft_power, lw=0.8, c='k')
     plt.xlabel('Period (min.)')
     plt.ylabel('Amplitude')
-    #plt.savefig(plot_folder+'fft_p%i_LC_%s'% (int(periods[-1]), LC_type))
+    plt.savefig(plot_folder+'fft_p%i_LC_%s'% (int(periods[-1]), LC_type))
 
-
-#LC_type is name of light curve type or variable name.
-# P_max is max period evaluated
-def fourier(signal, LC_type = '', P_max=130, show=False):
-    yf=np.flip(fft(signal)[0:N//2]) # flipped to match period
-    np.seterr(divide='ignore') # ignore the divide by zero warning caused in the next line
-    xp=np.flip(1/fftfreq(N, dt)[:N//2]/60) # period in minutes, flipped to go from small to large
-    indx = np.where(xp<=P_max)[0][-1]
-    yf = yf[:indx+1] # +1 to include endpoint
-    xp = xp[:indx+1]
-
-
-    plt.figure(figsize=(9,9))
-    plt.title('Fourier tranform of %s light curve' % LC_type)
-    plt.plot(xp[:indx],2.0/N * np.abs(yf[:indx]), c='k', lw=0.8)
-    plt.xlabel('Period (min.)')
-    plt.ylabel('Amplitude')
-    plt.savefig(plot_folder+'fft_%s' % LC_type)
-    if show==True:
-        plt.show()
 
 if __name__ == "__main__":
-    siint400 = np.loadtxt('data_files/siint_400.dat')
+    siint400 = np.loadtxt(data_folder + 'siint_400.dat')
     wavelet_func(siint400, LC_type = 'siint400' )
-    #fourier(siint400, LC_type= 'siint400', P_max = 15)
