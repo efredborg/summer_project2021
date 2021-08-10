@@ -55,7 +55,7 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
     #glbl_signif, tmp = wavelet.significance(var, dt,scales, 1, significance_level=0.95, dof=dof, wavelet='morlet')
 
     print('periods',periods[0], periods[-1])
-    print('fft periods',fft_periods[0], fft_periods[-1])
+    #print('fft periods',fft_periods[0], fft_periods[-1])
 
 
     #collapsing the power in the time dimension, but expluding the area outside the cone of interest
@@ -71,12 +71,41 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
     for i in range(power.shape[1]):
         collapsed_power += power[:,coi_indx[i]]
 
+    # finding the first and second dominant periods
+    #first global period.
+    left_indx = np.where(periods<=15)[0][-1]
+    print(periods[left_indx])
+    left = np.argmax(collapsed_power[:left_indx])
+    middle_indx = np.where(periods<=27)[0][-1]
+    print(periods[middle_indx])
+    middle = np.argmax(collapsed_power[left_indx:middle_indx])+left_indx
+    right = np.argmax(collapsed_power[middle_indx:])+middle_indx
+    #left area=0, middle=1, right=2
+    inds = [left, middle, right]
+    #print(inds)
+    first = inds[np.argmax(np.array((collapsed_power[inds[0]], collapsed_power[inds[1]], collapsed_power[inds[2]])))]
+    inds.remove(first)
+    second = inds[np.argmax(np.array((collapsed_power[inds[0]], collapsed_power[inds[1]])))]
+    #print(inds)
+    #print('-----------------------')
+
+    #gradient = np.gradient(collapsed_power)
+    #tol = 1e-2
+
+
+
 
     plt.figure(figsize=(9,9))
     plt.title('Global power profile for %s light curve' % LC_type)
     plt.plot(periods, collapsed_power, c='k', lw=0.8)
+    plt.plot(periods[first], collapsed_power[first],'o', c='red',label='Dominant period, P = %.1f' % periods[first])
+    plt.plot(periods[second], collapsed_power[second],'o', c='red',label='Secondary period, P = %.1f' % periods[second])
     plt.xlabel('Periods (min.)')
     plt.ylabel('Amplitude')
+    if periods[first]>30:
+        plt.legend(loc='lower right')
+    else:
+        plt.legend(loc='upper right')
     plt.savefig(plot_folder+'glbl_power__p%i_LC_%s.png' % (int(periods[-1]),LC_type))
     #plt.show()
 
