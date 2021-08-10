@@ -7,17 +7,6 @@ plt.rcParams['font.size'] = 16
 plot_folder = '/home/efredborg/Documents/summer_project2021/plots/'
 data_folder = '/home/efredborg/Documents/summer_project2021/data_files/'
 
-'''P = np.array((0.1,32)) # period interval we wish to consider (minutes)
-P_sec = P*60
-F_sec = 1/P_sec
-
-
-dt = 37 # seconds
-N = 660
-T = (N-1)*dt
-# scales translates to frequency or period. 6500 is around 130min period. 1700 is around 34min
-# 4000 is 82 min
-scales = np.arange(1,180) #'''
 
 def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
     #Defining som important quantities
@@ -72,29 +61,21 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
         collapsed_power += power[:,coi_indx[i]]
 
     # finding the first and second dominant periods
-    #first global period.
+    #dividing periods into 3 intervals, finding maximum in each, and choosing the two laregst peaks.
     left_indx = np.where(periods<=15)[0][-1]
-    print(periods[left_indx])
     left = np.argmax(collapsed_power[:left_indx])
     middle_indx = np.where(periods<=27)[0][-1]
-    print(periods[middle_indx])
     middle = np.argmax(collapsed_power[left_indx:middle_indx])+left_indx
     right = np.argmax(collapsed_power[middle_indx:])+middle_indx
     #left area=0, middle=1, right=2
     inds = [left, middle, right]
-    #print(inds)
     first = inds[np.argmax(np.array((collapsed_power[inds[0]], collapsed_power[inds[1]], collapsed_power[inds[2]])))]
     inds.remove(first)
     second = inds[np.argmax(np.array((collapsed_power[inds[0]], collapsed_power[inds[1]])))]
-    #print(inds)
-    #print('-----------------------')
-
-    #gradient = np.gradient(collapsed_power)
-    #tol = 1e-2
 
 
 
-
+    #plottinh the global wavelet power with dominant periods
     plt.figure(figsize=(9,9))
     plt.title('Global power profile for %s light curve' % LC_type)
     plt.plot(periods, collapsed_power, c='k', lw=0.8)
@@ -106,10 +87,10 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
         plt.legend(loc='lower right')
     else:
         plt.legend(loc='upper right')
-    plt.savefig(plot_folder+'glbl_power__p%i_LC_%s.png' % (int(periods[-1]),LC_type))
+    plt.savefig(plot_folder+'glbl_power_p%i_LC_%s.png' % (int(periods[-1]),LC_type))
     #plt.show()
 
-
+    #plottinhg wavelet power map with cone of influence
     plt.figure(figsize=(9,9))
     plt.title('Wavelet analysis on %s light curve' % LC_type)
     plt.imshow(power, aspect='auto', extent = [0,T, periods[-1], periods[0]], cmap=plt.cm.seismic)
