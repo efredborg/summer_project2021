@@ -90,15 +90,28 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
     plt.savefig(plot_folder+'glbl_power_p%i_LC_%s.png' % (int(periods[-1]),LC_type))
     #plt.show()
 
-    #plottinhg wavelet power map with cone of influence
+    ind_1 = np.where(coi>=periods[-1])[0][0]+5
+    ind_2 = np.where(coi>=periods[-1])[0][-1]-4
+    coi1 = coi[:ind_1]
+    coi2 = coi[ind_2:]
+    print(coi.shape, coi1.shape, coi2.shape)
+    #coi_new= np.concatenate((coi1, coi2))
+    #t_new = np.concatenate((t[:ind_1], t[ind_2:]))
+    #print(coi.shape, t.shape)
+    #new_coi.append(coi[:ind_1])
+    #new_coi.append
+
+    #plotting wavelet power map with cone of influence
     plt.figure(figsize=(9,9))
     plt.title('Wavelet analysis on %s light curve' % LC_type)
     plt.imshow(power, aspect='auto', extent = [0,T, periods[-1], periods[0]], cmap=plt.cm.seismic)
-    plt.plot(t, coi, c='r', label='Cone of influence')
+    #plt.plot(t[:i, coi2, c='r', label='Cone of influence')
+    plt.plot(t[:ind_1], coi1, c='r', label='Cone of influence')
+    plt.plot(t[ind_2:], coi2, c='r')
     plt.gca().invert_yaxis()
     plt.colorbar()
-    plt.xlabel('obs. time (min.)')
-    plt.ylabel('Signal period (min.)')
+    plt.xlabel('Time (min.)')
+    plt.ylabel('Period (min.)')
     plt.legend()
     plt.savefig(plot_folder+'wavelet_p%i_%s.png' % (int(periods[-1]), LC_type))
     if show==True:
@@ -107,8 +120,16 @@ def wavelet_func(signal, LC_type = '', plot_LC=False, show=False, P_max = 135):
         plt.figure(figsize=(9,9))
         plt.title('Light curve of %s' % LC_type)
         plt.plot(t,signal, lw=0.8 )
-        plt.xlabel('Obs. time (min.)')
-        plt.ylabel('Amplitude, %s' % LC_type)
+        plt.xlabel('Time (min.)')
+        if LC_type == 'temperature':
+            plt.ylabel('Temperature [K]')
+        elif LC_type == 'vlos':
+             plt.ylabel('m/s')
+        elif LC_type == 'vturb':
+             plt.ylabel('m/s')
+        elif LC_type == '$n_e$':
+             plt.ylabel('$cm^{-3}$')
+
         plt.savefig(plot_folder+'LC_%s.png' % LC_type)
         if show==True:
             plt.show()
